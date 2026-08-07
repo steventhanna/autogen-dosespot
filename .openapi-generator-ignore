@@ -1,0 +1,13 @@
+# Generation happens out-of-tree (into a temp dir) and only `src/<plan>/{apis,models}` is
+# vendored back in, so the hand-written files below are protected by construction. This file
+# documents that intent and guards against accidental in-place generation.
+Cargo.toml
+src/lib.rs
+src/client.rs
+src/ids.rs
+src/token.rs
+README.md
+CLAUDE.md
+.gitignore
+.travis.yml
+git_push.sh

@@ -21,6 +21,8 @@ pub struct CompoundPrescriptionRequest {
     pub first_prescription_diagnosis: Option<Box<models::PrescriptionDiagnosisIds>>,
     #[serde(rename = "SecondPrescriptionDiagnosis", skip_serializing_if = "Option::is_none")]
     pub second_prescription_diagnosis: Option<Box<models::PrescriptionDiagnosisIds>>,
+    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
+    pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Refills")]
     pub refills: i32,
     #[serde(rename = "DaysSupply", skip_serializing_if = "Option::is_none")]
@@ -53,12 +55,8 @@ pub struct CompoundPrescriptionRequest {
     pub supervisor_id: Option<crate::ids::ClinicianId>,
     #[serde(rename = "RetailPharmacyToMailToPatient", skip_serializing_if = "Option::is_none")]
     pub retail_pharmacy_to_mail_to_patient: Option<bool>,
-    #[serde(rename = "RTPSCoupon", skip_serializing_if = "Option::is_none")]
-    pub rtps_coupon: Option<Box<models::RtpsCoupon>>,
     #[serde(rename = "Status")]
     pub status: Status,
-    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
-    pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     #[serde(rename = "Encounter", skip_serializing_if = "Option::is_none")]
@@ -72,6 +70,7 @@ impl CompoundPrescriptionRequest {
             compound_ingredients,
             first_prescription_diagnosis: None,
             second_prescription_diagnosis: None,
+            inactive_date: None,
             refills,
             days_supply: None,
             dispense_unit_id,
@@ -88,9 +87,7 @@ impl CompoundPrescriptionRequest {
             is_urgent: None,
             supervisor_id: None,
             retail_pharmacy_to_mail_to_patient: None,
-            rtps_coupon: None,
             status,
-            inactive_date: None,
             comment: None,
             encounter: None,
         }

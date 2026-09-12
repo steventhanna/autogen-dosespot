@@ -13,10 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateSelfReportedMedicationStatusRequest {
-    #[serde(rename = "Status")]
-    pub status: Status,
     #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
     pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
+    #[serde(rename = "Status")]
+    pub status: Status,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     #[serde(rename = "Encounter", skip_serializing_if = "Option::is_none")]
@@ -26,8 +26,8 @@ pub struct UpdateSelfReportedMedicationStatusRequest {
 impl UpdateSelfReportedMedicationStatusRequest {
     pub fn new(status: Status) -> UpdateSelfReportedMedicationStatusRequest {
         UpdateSelfReportedMedicationStatusRequest {
-            status,
             inactive_date: None,
+            status,
             comment: None,
             encounter: None,
         }

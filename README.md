@@ -158,8 +158,9 @@ opentelemetry dependency — it only accepts and routes requests through what yo
 > **Breaking in 0.2:** `Configuration.client` changed from `reqwest::Client` to
 > `reqwest_middleware::ClientWithMiddleware` (and each plan's `apis::Error` gained a
 > `ReqwestMiddleware` variant); `token::request_token` takes the HTTP client as its first
-> argument; and `token::TokenError::Reqwest(reqwest::Error)` became
-> `TokenError::Http(reqwest_middleware::Error)`.
+> argument; `token::TokenError::Reqwest(reqwest::Error)` became
+> `TokenError::Http(reqwest_middleware::Error)`; and the crate moved to reqwest 0.13 /
+> reqwest-middleware 0.5 (pair it with reqwest-tracing 0.7).
 
 ## Strict ID types
 

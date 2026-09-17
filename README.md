@@ -29,7 +29,7 @@ Your DoseSpot account has exactly one plan — enable only that feature (plus a 
 
 ```toml
 [dependencies]
-autogen-dosespot = { version = "0.1", default-features = false, features = ["full-epcs", "native-tls"] }
+autogen-dosespot = { version = "0.2", default-features = false, features = ["full-epcs", "native-tls"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
@@ -96,7 +96,9 @@ underlying HTTP client, so every generated API function sends them automatically
 use autogen_dosespot::{DoseSpotClient, token};
 
 # async fn run() -> Result<(), Box<dyn std::error::Error>> {
+let http = autogen_dosespot::reqwest_middleware::ClientBuilder::new(autogen_dosespot::reqwest::Client::new()).build();
 let token = token::request_token(
+    &http,
     "https://my.dosespot.com",
     "your-subscription-key",
     "your-clinic-id",
@@ -108,6 +110,9 @@ let client = DoseSpotClient::new("your-subscription-key", &token.access_token)?;
 # Ok(())
 # }
 ```
+
+Pass the same `http` (with the same middleware chain) you give [`DoseSpotClient::builder`](#middleware)
+so the token request is observed identically to every other call.
 
 Access tokens expire (`token.expires_in`) — caching, refresh, and per-clinician token strategy
 are up to you; mint a token and construct a new `DoseSpotClient` whenever your policy calls
@@ -125,6 +130,36 @@ full.base_path = "https://my.staging.dosespot.com/webapi/v2".to_string();
 # Ok(())
 # }
 ```
+
+## Middleware
+
+Every generated `Configuration.client` is a `reqwest_middleware::ClientWithMiddleware`. Attach
+middleware — for example a `reqwest_tracing::TracingMiddleware` installed by the application —
+with `DoseSpotClient::builder`:
+
+```rust,no_run
+# #[cfg(feature = "full")]
+# fn run() -> Result<(), Box<dyn std::error::Error>> {
+use autogen_dosespot::DoseSpotClient;
+
+let client = DoseSpotClient::builder("your-subscription-key", "your-access-token")
+    // .with(my_middleware)
+    .build()?;
+# Ok(())
+# }
+```
+
+Middleware is applied in the order added, to every request the crate makes, including the token
+request (pass the same chain to `token::request_token`; see [Authentication](#authentication)).
+`autogen_dosespot::reqwest_middleware` is re-exported so you build middleware against the same
+version this crate links. The crate itself creates no spans, logs no URLs, and has no
+opentelemetry dependency — it only accepts and routes requests through what you attach.
+
+> **Breaking in 0.2:** `Configuration.client` changed from `reqwest::Client` to
+> `reqwest_middleware::ClientWithMiddleware` (and each plan's `apis::Error` gained a
+> `ReqwestMiddleware` variant); `token::request_token` takes the HTTP client as its first
+> argument; and `token::TokenError::Reqwest(reqwest::Error)` became
+> `TokenError::Http(reqwest_middleware::Error)`.
 
 ## Strict ID types
 

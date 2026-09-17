@@ -23,17 +23,23 @@ hand-written. Structure mirrors the sibling `autogen-stedi` repo.
 - The specs declare **no security schemes**. The v2 API actually requires a
   `Subscription-Key: <key>` header plus `Authorization: Bearer <token>` (token from
   `POST /webapi/v2/connect/token`, outside the spec). `src/client.rs` holds a `DoseSpotClient`
-  that bakes both into a `reqwest::Client` as default headers and, via a macro, exposes a
-  per-plan accessor returning that plan's `Configuration` with that client wired in.
+  built via `DoseSpotClient::builder(...)` (`DoseSpotClientBuilder`), which bakes both headers
+  into a `reqwest::Client`, wraps it in a `reqwest_middleware::ClientWithMiddleware` with any
+  middleware attached via `.with`/`.with_arc`, and, via a macro, exposes a per-plan accessor
+  returning that plan's `Configuration` with that client wired in. The crate itself never creates
+  spans or logs URLs — it only routes requests through whatever middleware the consumer attaches
+  (guarded by `tests/middleware.rs`).
 - `src/ids.rs` (hand-written) defines strict entity-ID newtypes (`PatientId`, `PrescriptionId`,
   …) shared by all plan modules. `scripts/fix-id-types.py` rewrites an allowlist of generated
   `i32` ID parameters/fields to them post-generation (transposed IDs become compile errors);
   unknown ID names stay `i32`, so spec changes can't break the pipeline. Keep the script's table
   and `src/ids.rs` in sync. Guarded by the `PatientId` call in `tests/datetime_query_params.rs`.
 - `src/token.rs` (also hand-written) holds the stateless `request_token` password-grant helper.
-  The grant's field values are undocumented publicly — notably `password` = clinic key — and are
-  guarded by `tests/token_request.rs`. Token caching/refresh policy is deliberately left to the
-  consumer.
+  It takes a `&reqwest_middleware::ClientWithMiddleware` as its first argument (the same client/
+  middleware chain passed to `DoseSpotClient::builder`, so the token call is observed like every
+  other request). The grant's field values are undocumented publicly — notably `password` =
+  clinic key — and are guarded by `tests/token_request.rs`. Token caching/refresh policy is
+  deliberately left to the consumer.
 
 ## Commands
 
@@ -46,6 +52,10 @@ cargo doc --no-deps                                           # generate docs
 ```
 
 ## Regeneration
+
+`generate.sh` passes `supportMiddleware=true` to openapi-generator, which is what makes generated
+`apis/configuration.rs` use `reqwest_middleware::ClientWithMiddleware` and `apis/mod.rs`'s
+`Error<T>` gain a `ReqwestMiddleware`/`From<reqwest_middleware::Error>` arm; do not remove it.
 
 `./generate.sh` fetches all seven specs, records their combined SHA-256 in `SPEC_HASH`, sanitizes
 generic model names (`scripts/fix-model-names.py`: `ItemResponse[X]` → `ItemResponseX`, since the

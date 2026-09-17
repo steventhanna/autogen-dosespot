@@ -57,6 +57,27 @@
 //! URL (`https://my.dosespot.com/webapi/v2`) is baked in from the spec; you can still override
 //! `base_path` on the returned value to point at DoseSpot staging, a proxy, or a mock server.
 //!
+//! ## Middleware
+//!
+//! Every generated `Configuration.client` is a `reqwest_middleware::ClientWithMiddleware`. Attach
+//! middleware with [`DoseSpotClient::builder`] — for example a `reqwest_tracing::TracingMiddleware`
+//! installed by the application:
+//!
+//! ```no_run
+//! # #[cfg(feature = "full")]
+//! # fn run() -> Result<(), Box<dyn std::error::Error>> {
+//! use autogen_dosespot::DoseSpotClient;
+//!
+//! let client = DoseSpotClient::builder("your-subscription-key", "your-access-token")
+//!     // .with(reqwest_tracing::TracingMiddleware::default())
+//!     .build()?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! This crate itself emits no spans, logs no URLs, and has no opentelemetry dependency — it only
+//! accepts and routes requests through whatever middleware you attach.
+//!
 //! ## Error handling
 //!
 //! Calls return `Result<T, apis::Error<E>>`, where `E` is the endpoint-specific error enum.
@@ -70,7 +91,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! autogen-dosespot = { version = "0.1", default-features = false, features = ["full-epcs", "native-tls"] }
+//! autogen-dosespot = { version = "0.2", default-features = false, features = ["full-epcs", "native-tls"] }
 //! ```
 
 #![allow(unused_imports)]
@@ -95,4 +116,10 @@ pub mod client;
 pub mod ids;
 pub mod token;
 
-pub use client::{ClientBuildError, DoseSpotClient};
+pub use client::{ClientBuildError, DoseSpotClient, DoseSpotClientBuilder};
+
+/// Re-exported so callers build middleware against the same `reqwest_middleware` version this
+/// crate links.
+pub use reqwest_middleware;
+/// Re-exported for the same reason: the `Middleware` trait is written in terms of `reqwest` types.
+pub use reqwest;

@@ -1,6 +1,6 @@
 [package]
 name = "autogen-dosespot"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license = "MIT"
 description = "Auto-generated, strongly-typed Rust client for the DoseSpot v2 REST API"
@@ -26,7 +26,8 @@ all-features = true
 
 [dependencies]
 chrono = { version = "^0.4", features = ["serde"] }
-reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart"] }
+reqwest = { version = "^0.13", default-features = false, features = ["json", "multipart", "query", "form"] }
+reqwest-middleware = { version = "^0.5", features = ["json", "multipart", "query", "form"] }
 serde = { version = "^1.0", features = ["derive"] }
 serde_json = "^1.0"
 serde_repr = "^0.1"
@@ -36,11 +37,14 @@ uuid = { version = "^1.8", features = ["serde", "v4"] }
 
 [dev-dependencies]
 tokio = { version = "^1", features = ["macros", "rt-multi-thread"] }
+wiremock = "^0.6"
+async-trait = "^0.1"
+http = "^1"
 
 [features]
 default = ["all", "native-tls"]
 native-tls = ["reqwest/native-tls"]
-rustls = ["reqwest/rustls-tls"]
+rustls = ["reqwest/rustls"]
 
 # Each DoseSpot plan spec is one feature. A given account has exactly one plan, so most
 # consumers should disable defaults and enable only their plan's module (plus a TLS backend).

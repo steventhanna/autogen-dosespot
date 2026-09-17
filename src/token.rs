@@ -37,8 +37,8 @@ pub struct TokenResponse {
 /// Error from [`request_token`].
 #[derive(Debug)]
 pub enum TokenError {
-    /// The HTTP request failed (transport, TLS, invalid header value, …).
-    Reqwest(reqwest::Error),
+    /// The HTTP request failed (transport, middleware, TLS, invalid header value, …).
+    Http(reqwest_middleware::Error),
     /// The server answered with a non-success status.
     Api {
         status: reqwest::StatusCode,
@@ -49,7 +49,7 @@ pub enum TokenError {
 impl std::fmt::Display for TokenError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Reqwest(e) => write!(f, "token request failed: {e}"),
+            Self::Http(e) => write!(f, "token request failed: {e}"),
             Self::Api { status, body } => write!(f, "token endpoint returned {status}: {body}"),
         }
     }
@@ -58,13 +58,18 @@ impl std::fmt::Display for TokenError {
 impl std::error::Error for TokenError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Self::Reqwest(e) => Some(e),
+            Self::Http(e) => Some(e),
             Self::Api { .. } => None,
         }
     }
 }
 
 /// Request an OAuth2 access token from the DoseSpot v2 token endpoint.
+///
+/// `http` is the same `reqwest_middleware::ClientWithMiddleware` (and middleware chain) you pass
+/// to [`DoseSpotClient::builder`](crate::DoseSpotClient::builder), so the token call is traced
+/// (or otherwise observed) exactly like every other request. A plain `reqwest::Client` converts
+/// with `.into()` if you have no middleware to attach.
 ///
 /// `base_url` is the host root — `https://my.dosespot.com` for production,
 /// `https://my.staging.dosespot.com` for staging (a trailing slash is fine);
@@ -73,7 +78,12 @@ impl std::error::Error for TokenError {
 ///
 /// ```no_run
 /// # async fn run() -> Result<(), Box<dyn std::error::Error>> {
+/// let http = autogen_dosespot::reqwest_middleware::ClientBuilder::new(
+///     autogen_dosespot::reqwest::Client::new(),
+/// )
+/// .build();
 /// let token = autogen_dosespot::token::request_token(
+///     &http,
 ///     "https://my.dosespot.com",
 ///     "your-subscription-key",
 ///     "your-clinic-id",
@@ -86,6 +96,7 @@ impl std::error::Error for TokenError {
 /// # }
 /// ```
 pub async fn request_token(
+    http: &reqwest_middleware::ClientWithMiddleware,
     base_url: &str,
     subscription_key: &str,
     clinic_id: &str,
@@ -106,18 +117,18 @@ pub async fn request_token(
         ("scope", "api"),
     ];
 
-    let response = reqwest::Client::new()
+    let response = http
         .post(url)
         .header("Subscription-Key", subscription_key)
         .form(&form)
         .send()
         .await
-        .map_err(TokenError::Reqwest)?;
+        .map_err(TokenError::Http)?;
 
     let status = response.status();
     if !status.is_success() {
         let body = response.text().await.unwrap_or_default();
         return Err(TokenError::Api { status, body });
     }
-    response.json().await.map_err(TokenError::Reqwest)
+    response.json().await.map_err(|e| TokenError::Http(e.into()))
 }

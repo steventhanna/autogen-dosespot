@@ -31,7 +31,9 @@ async fn token_request_sends_dosespot_password_grant() {
     let addr = listener.local_addr().unwrap();
     let server = capture_one_request(listener);
 
+    let http = reqwest_middleware::ClientBuilder::new(reqwest::Client::new()).build();
     let token = autogen_dosespot::token::request_token(
+        &http,
         &format!("http://{addr}/"), // trailing slash must be tolerated
         "sub-key",
         "clinic-id",

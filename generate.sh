@@ -79,7 +79,7 @@ for pair in $PLANS; do
     -g rust \
     --library reqwest \
     --skip-validate-spec \
-    --additional-properties=packageName=autogen-dosespot-${module//_/-},supportAsync=true \
+    --additional-properties=packageName=autogen-dosespot-${module//_/-},supportAsync=true,supportMiddleware=true \
     -o "$WORK/gen-$spec" \
     2>&1 | tail -3
 

@@ -33,8 +33,6 @@ pub struct GetRefillDetailedResponse {
     pub pharmacy_id: Option<crate::ids::PharmacyId>,
     #[serde(rename = "RequestedDate", skip_serializing_if = "Option::is_none")]
     pub requested_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "RequestExpirationDate", skip_serializing_if = "Option::is_none")]
-    pub request_expiration_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl GetRefillDetailedResponse {
@@ -50,7 +48,6 @@ impl GetRefillDetailedResponse {
             original_prescription: None,
             pharmacy_id: None,
             requested_date: None,
-            request_expiration_date: None,
         }
     }
 }

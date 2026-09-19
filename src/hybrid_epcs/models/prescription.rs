@@ -75,6 +75,12 @@ pub struct Prescription {
     pub rx_renewal_note: Option<String>,
     #[serde(rename = "Strength", skip_serializing_if = "Option::is_none")]
     pub strength: Option<String>,
+    /// Prior authorization status of the prescription's most recent active PA case. Null if none exists.
+    #[serde(rename = "PriorAuthorizationStatusType", skip_serializing_if = "Option::is_none")]
+    pub prior_authorization_status_type: Option<PriorAuthorizationStatusType>,
+    /// Identifier of the prescription's most recent active prior authorization case. Null if none exists.
+    #[serde(rename = "PriorAuthorizationCaseId", skip_serializing_if = "Option::is_none")]
+    pub prior_authorization_case_id: Option<i32>,
     #[serde(rename = "PatientMedicationId", skip_serializing_if = "Option::is_none")]
     pub patient_medication_id: Option<i32>,
     #[serde(rename = "MedicationStatus", skip_serializing_if = "Option::is_none")]
@@ -129,6 +135,8 @@ impl Prescription {
             is_rx_renewal: None,
             rx_renewal_note: None,
             strength: None,
+            prior_authorization_status_type: None,
+            prior_authorization_case_id: None,
             patient_medication_id: None,
             medication_status: None,
             comment: None,
@@ -215,6 +223,50 @@ pub enum FreeTextType {
 impl Default for FreeTextType {
     fn default() -> FreeTextType {
         Self::Medication
+    }
+}
+/// Prior authorization status of the prescription's most recent active PA case. Null if none exists.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum PriorAuthorizationStatusType {
+    #[serde(rename = "Unknown")]
+    Unknown,
+    #[serde(rename = "Requested")]
+    Requested,
+    #[serde(rename = "NotRequired")]
+    NotRequired,
+    #[serde(rename = "Closed")]
+    Closed,
+    #[serde(rename = "Deferred")]
+    Deferred,
+    #[serde(rename = "ActionRequired")]
+    ActionRequired,
+    #[serde(rename = "Pending")]
+    Pending,
+    #[serde(rename = "Approved")]
+    Approved,
+    #[serde(rename = "Denied")]
+    Denied,
+    #[serde(rename = "AppealRequested")]
+    AppealRequested,
+    #[serde(rename = "CancelRequested")]
+    CancelRequested,
+    #[serde(rename = "Canceled")]
+    Canceled,
+    #[serde(rename = "CancelDenied")]
+    CancelDenied,
+    #[serde(rename = "Error")]
+    Error,
+    #[serde(rename = "Deleted")]
+    Deleted,
+    #[serde(rename = "PartiallyDenied")]
+    PartiallyDenied,
+    #[serde(rename = "InProcess")]
+    InProcess,
+}
+
+impl Default for PriorAuthorizationStatusType {
+    fn default() -> PriorAuthorizationStatusType {
+        Self::Unknown
     }
 }
 /// 

@@ -31,10 +31,10 @@ pub struct CodedSelfReportedMedicationRequest {
     pub prescriber_user_id: Option<i32>,
     #[serde(rename = "PrescribingAgentUserId", skip_serializing_if = "Option::is_none")]
     pub prescribing_agent_user_id: Option<i32>,
-    #[serde(rename = "Status")]
-    pub status: Status,
     #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
     pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
+    #[serde(rename = "Status")]
+    pub status: Status,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     #[serde(rename = "Encounter", skip_serializing_if = "Option::is_none")]
@@ -53,8 +53,8 @@ impl CodedSelfReportedMedicationRequest {
             written_date: None,
             prescriber_user_id: None,
             prescribing_agent_user_id: None,
-            status,
             inactive_date: None,
+            status,
             comment: None,
             encounter: None,
         }

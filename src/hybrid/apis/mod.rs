@@ -136,6 +136,7 @@ pub mod interactions_api;
 pub mod medication_history_api;
 pub mod medications_api;
 pub mod notifications_api;
+pub mod patient_diagnoses_api;
 pub mod patients_api;
 pub mod pharmacies_api;
 pub mod prescriptions_api;

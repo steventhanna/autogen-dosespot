@@ -37,9 +37,9 @@ pub struct GetRxChangeDetailedResponse {
     pub clinic_id: Option<crate::ids::ClinicId>,
     #[serde(rename = "PharmacyId", skip_serializing_if = "Option::is_none")]
     pub pharmacy_id: Option<crate::ids::PharmacyId>,
-    #[serde(rename = "RequestedDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "RequestedDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub requested_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "RequestExpirationDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "RequestExpirationDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub request_expiration_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "OriginalPrescription", skip_serializing_if = "Option::is_none")]
     pub original_prescription: Option<Box<models::Prescription>>,

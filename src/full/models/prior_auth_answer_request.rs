@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct PriorAuthAnswerRequest {
     #[serde(rename = "PriorAuthorizationQuestionChoices", skip_serializing_if = "Option::is_none")]
     pub prior_authorization_question_choices: Option<Vec<models::PriorAuthorizationChoiceAnswer>>,
-    #[serde(rename = "DateTimeAnswer", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateTimeAnswer", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_time_answer: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "NumericAnswer", skip_serializing_if = "Option::is_none")]
     pub numeric_answer: Option<f64>,

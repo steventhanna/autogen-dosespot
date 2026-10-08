@@ -28,7 +28,7 @@ pub struct ClinicianIdentityProofingRequest {
     pub state: String,
     #[serde(rename = "ZipCode")]
     pub zip_code: String,
-    #[serde(rename = "DateOfBirth")]
+    #[serde(rename = "DateOfBirth", deserialize_with = "crate::datetime::deserialize")]
     pub date_of_birth: chrono::DateTime<chrono::FixedOffset>,
     #[serde(rename = "SocialSecurityNumber", skip_serializing_if = "Option::is_none")]
     pub social_security_number: Option<String>,

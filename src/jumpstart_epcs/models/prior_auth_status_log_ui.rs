@@ -17,7 +17,7 @@ pub struct PriorAuthStatusLogUi {
     pub status: Option<String>,
     #[serde(rename = "AdditionalInfo", skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<String>,
-    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub created_date_stamp: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Attachment", skip_serializing_if = "Option::is_none")]
     pub attachment: Option<Box<models::PaAttachment>>,

@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct PaAttachment {
     #[serde(rename = "AttachmentId", skip_serializing_if = "Option::is_none")]
     pub attachment_id: Option<i32>,
-    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub created_date_stamp: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "FileName", skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,

@@ -17,9 +17,9 @@ pub struct PriorAuthorizationHistoryResponse {
     pub final_status: Option<String>,
     #[serde(rename = "AuthorizationNumber", skip_serializing_if = "Option::is_none")]
     pub authorization_number: Option<String>,
-    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "ExpirationDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ExpirationDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub expiration_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Note", skip_serializing_if = "Option::is_none")]
     pub note: Option<String>,

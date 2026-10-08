@@ -25,7 +25,7 @@ pub struct FreetextPatientAllergyRequest {
     #[serde(rename = "StatusType")]
     pub status_type: StatusType,
     /// The onset date of the allergy.
-    #[serde(rename = "OnsetDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "OnsetDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub onset_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

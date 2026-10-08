@@ -19,9 +19,9 @@ pub struct QuantityLimitRestriction {
     pub amount_unit: Option<AmountUnit>,
     #[serde(rename = "TimePeriodUnit", skip_serializing_if = "Option::is_none")]
     pub time_period_unit: Option<TimePeriodUnit>,
-    #[serde(rename = "StartDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "StartDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub start_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "EndDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EndDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub end_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "MaximumTimePeriodUnits", skip_serializing_if = "Option::is_none")]
     pub maximum_time_period_units: Option<i32>,

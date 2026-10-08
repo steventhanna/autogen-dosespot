@@ -23,16 +23,16 @@ pub struct PriorAuthorizationCaseFullDetails {
     pub note: Option<String>,
     #[serde(rename = "IsOffline", skip_serializing_if = "Option::is_none")]
     pub is_offline: Option<bool>,
-    #[serde(rename = "InitializedDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "InitializedDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub initialized_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "NextResponseDeadline", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "NextResponseDeadline", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub next_response_deadline: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "CurrentStatus", skip_serializing_if = "Option::is_none")]
     pub current_status: Option<CurrentStatus>,
-    #[serde(rename = "CurrentStatusDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "CurrentStatusDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub current_status_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Only available if an InProcess prior authorization case has been recieved
-    #[serde(rename = "ExpectedResponseDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ExpectedResponseDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub expected_response_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Only available if the prior authorization case is in a state that requires an attachment
     #[serde(rename = "AttachmentRequired", skip_serializing_if = "Option::is_none")]

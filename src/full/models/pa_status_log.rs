@@ -19,7 +19,7 @@ pub struct PaStatusLog {
     pub additional_info_attachment_id: Option<i32>,
     #[serde(rename = "AdditionalInfo", skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<String>,
-    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "CreatedDateStamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub created_date_stamp: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

@@ -17,7 +17,7 @@ pub struct ApproveRefillRequest {
     pub refills: i32,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

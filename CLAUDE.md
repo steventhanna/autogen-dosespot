@@ -62,7 +62,9 @@ generic model names (`scripts/fix-model-names.py`: `ItemResponse[X]` → `ItemRe
 generator would otherwise emit `ItemResponseLeftSquareBracket…` identifiers), generates each into
 a temp dir, vendors `apis/` + `models/` into `src/<plan>/`, rewrites crate paths, writes each
 `src/<plan>/mod.rs`, applies post-fixes (duplicate-field dedup; RFC 3339 datetime query params,
-guarded by `tests/datetime_query_params.rs`), and runs `cargo check`. The run is idempotent. Do
+guarded by `tests/datetime_query_params.rs`; `scripts/fix-datetime-fields.py` points every
+`DateTime` model field at the hand-written `src/datetime.rs` deserializer, which reads DoseSpot's
+offset-less date-times as UTC, guarded by `tests/datetime_fields.rs`), and runs `cargo check`. The run is idempotent. Do
 not hand-edit anything under `src/<plan>/` — fix the spec upstream or the `generate.sh`
 pre/post-processing instead.
 

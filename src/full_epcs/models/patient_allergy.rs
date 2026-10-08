@@ -27,7 +27,7 @@ pub struct PatientAllergy {
     pub reaction_type: Option<ReactionType>,
     #[serde(rename = "StatusType", skip_serializing_if = "Option::is_none")]
     pub status_type: Option<StatusType>,
-    #[serde(rename = "OnsetDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "OnsetDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub onset_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "LastUpdatedUserId", skip_serializing_if = "Option::is_none")]
     pub last_updated_user_id: Option<i32>,

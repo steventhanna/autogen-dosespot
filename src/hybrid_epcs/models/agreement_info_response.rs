@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct AgreementInfoResponse {
     #[serde(rename = "AgreementId", skip_serializing_if = "Option::is_none")]
     pub agreement_id: Option<i32>,
-    #[serde(rename = "AgreementDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "AgreementDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub agreement_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "AgreementText", skip_serializing_if = "Option::is_none")]
     pub agreement_text: Option<String>,

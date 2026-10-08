@@ -19,9 +19,9 @@ pub struct SureScriptsHistoryMedication {
     pub pharmacy_notes: Option<String>,
     #[serde(rename = "NoSubstitutions", skip_serializing_if = "Option::is_none")]
     pub no_substitutions: Option<bool>,
-    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "LastFillDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "LastFillDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub last_fill_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Payer", skip_serializing_if = "Option::is_none")]
     pub payer: Option<String>,
@@ -37,7 +37,7 @@ pub struct SureScriptsHistoryMedication {
     pub quantity: Option<String>,
     #[serde(rename = "Refills", skip_serializing_if = "Option::is_none")]
     pub refills: Option<String>,
-    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub written_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "DiagnosisCode", skip_serializing_if = "Option::is_none")]
     pub diagnosis_code: Option<String>,
@@ -67,7 +67,7 @@ pub struct SureScriptsHistoryMedication {
     pub display_name: Option<String>,
     #[serde(rename = "DrugClassification", skip_serializing_if = "Option::is_none")]
     pub drug_classification: Option<String>,
-    #[serde(rename = "ExpirationDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ExpirationDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub expiration_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

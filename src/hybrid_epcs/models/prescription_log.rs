@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct PrescriptionLog {
     #[serde(rename = "Status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
-    #[serde(rename = "DateTimeStamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateTimeStamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_time_stamp: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "AdditionalInfo", skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<String>,

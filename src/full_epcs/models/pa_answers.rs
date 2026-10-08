@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct PaAnswers {
     #[serde(rename = "Answer", skip_serializing_if = "Option::is_none")]
     pub answer: Option<String>,
-    #[serde(rename = "AnswerDateTime", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "AnswerDateTime", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub answer_date_time: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "AnswerNumeric", skip_serializing_if = "Option::is_none")]
     pub answer_numeric: Option<f64>,

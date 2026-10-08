@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CopyPrescriptionRequest {
-    #[serde(rename = "NewEffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "NewEffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub new_effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

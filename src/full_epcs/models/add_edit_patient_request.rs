@@ -23,7 +23,7 @@ pub struct AddEditPatientRequest {
     pub last_name: String,
     #[serde(rename = "Suffix", skip_serializing_if = "Option::is_none")]
     pub suffix: Option<String>,
-    #[serde(rename = "DateOfBirth")]
+    #[serde(rename = "DateOfBirth", deserialize_with = "crate::datetime::deserialize")]
     pub date_of_birth: chrono::DateTime<chrono::FixedOffset>,
     #[serde(rename = "Gender")]
     pub gender: Gender,

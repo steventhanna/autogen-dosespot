@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LatestNarxResponse {
-    #[serde(rename = "LatestTimestamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "LatestTimestamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub latest_timestamp: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "PatientId", skip_serializing_if = "Option::is_none")]
     pub patient_id: Option<crate::ids::PatientId>,

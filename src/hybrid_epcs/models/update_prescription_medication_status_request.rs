@@ -17,7 +17,7 @@ pub struct UpdatePrescriptionMedicationStatusRequest {
     pub status: Status,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 

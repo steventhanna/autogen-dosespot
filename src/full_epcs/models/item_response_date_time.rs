@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ItemResponseDateTime {
     /// The response object.
-    #[serde(rename = "Item", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "Item", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub item: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Result", skip_serializing_if = "Option::is_none")]
     pub result: Option<Box<models::Result>>,

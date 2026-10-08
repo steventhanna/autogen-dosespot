@@ -14,10 +14,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetPatientMedicationApiRequest {
     /// End of date range (timestamp UTC)
-    #[serde(rename = "EndDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EndDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub end_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Start of date range (timestamp UTC)
-    #[serde(rename = "StartDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "StartDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub start_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Getting Prescription for Active/Inactive/Pending Medication
     #[serde(rename = "StatusClass", skip_serializing_if = "Option::is_none")]

@@ -21,7 +21,7 @@ pub struct PayerDemographics {
     pub middle_name: Option<String>,
     #[serde(rename = "Suffix", skip_serializing_if = "Option::is_none")]
     pub suffix: Option<String>,
-    #[serde(rename = "DateOfBirth", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateOfBirth", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_of_birth: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Gender", skip_serializing_if = "Option::is_none")]
     pub gender: Option<Gender>,

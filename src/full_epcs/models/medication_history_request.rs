@@ -13,9 +13,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MedicationHistoryRequest {
-    #[serde(rename = "Start", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "Start", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub start: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "End", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "End", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub end: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "PageNumber", skip_serializing_if = "Option::is_none")]
     pub page_number: Option<i32>,

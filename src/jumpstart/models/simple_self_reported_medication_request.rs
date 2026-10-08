@@ -25,7 +25,7 @@ pub struct SimpleSelfReportedMedicationRequest {
     pub quantity: Option<f64>,
     #[serde(rename = "Directions", skip_serializing_if = "Option::is_none")]
     pub directions: Option<String>,
-    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub written_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "PrescriberUserId", skip_serializing_if = "Option::is_none")]
     pub prescriber_user_id: Option<i32>,
@@ -33,7 +33,7 @@ pub struct SimpleSelfReportedMedicationRequest {
     pub prescribing_agent_user_id: Option<i32>,
     #[serde(rename = "Status")]
     pub status: Status,
-    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,

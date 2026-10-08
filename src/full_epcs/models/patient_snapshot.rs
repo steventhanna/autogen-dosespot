@@ -17,7 +17,7 @@ pub struct PatientSnapshot {
     pub first_name: Option<String>,
     #[serde(rename = "LastName", skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    #[serde(rename = "DateOfBirth", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateOfBirth", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_of_birth: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Address", skip_serializing_if = "Option::is_none")]
     pub address: Option<Box<models::AddressSnapshot>>,

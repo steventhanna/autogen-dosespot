@@ -19,9 +19,9 @@ pub struct PaFinalStatus {
     pub closed_reason_code_id: Option<ClosedReasonCodeId>,
     #[serde(rename = "AuthorizationNumber", skip_serializing_if = "Option::is_none")]
     pub authorization_number: Option<String>,
-    #[serde(rename = "AuthorizationPeriodStart", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "AuthorizationPeriodStart", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub authorization_period_start: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "AuthorizationPeriodEnd", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "AuthorizationPeriodEnd", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub authorization_period_end: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "PharmacyType", skip_serializing_if = "Option::is_none")]
     pub pharmacy_type: Option<PharmacyType>,

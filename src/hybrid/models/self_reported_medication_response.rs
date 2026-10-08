@@ -15,9 +15,9 @@ use serde::{Deserialize, Serialize};
 pub struct SelfReportedMedicationResponse {
     #[serde(rename = "SelfReportedMedicationId", skip_serializing_if = "Option::is_none")]
     pub self_reported_medication_id: Option<crate::ids::SelfReportedMedicationId>,
-    #[serde(rename = "DateReported", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateReported", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_reported: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "DatePrescribed", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DatePrescribed", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_prescribed: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "DisplayName", skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
@@ -41,7 +41,7 @@ pub struct SelfReportedMedicationResponse {
     pub comment: Option<String>,
     #[serde(rename = "Status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
-    #[serde(rename = "DiscontinuedDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DiscontinuedDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub discontinued_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Schedule", skip_serializing_if = "Option::is_none")]
     pub schedule: Option<i32>,

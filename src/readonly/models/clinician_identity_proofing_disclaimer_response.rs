@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ClinicianIdentityProofingDisclaimerResponse {
-    #[serde(rename = "IdpDisclaimerDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "IdpDisclaimerDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub idp_disclaimer_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "IdpDisclaimerId", skip_serializing_if = "Option::is_none")]
     pub idp_disclaimer_id: Option<i32>,

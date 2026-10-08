@@ -208,13 +208,15 @@ template) on each, and vendors the generated `apis/` and `models/` into a per-pl
 `src/<plan>/`. Because the rust generator emits absolute `crate::apis` / `crate::models` paths,
 the script rewrites them to `crate::<plan>::…` so the code compiles inside a submodule. Finally
 it rewrites chrono `DateTime` query-param serialization to RFC 3339 (guarded by
-`tests/datetime_query_params.rs`) and runs `cargo check`.
+`tests/datetime_query_params.rs`), points every date-time model field at a lenient deserializer
+(guarded by `tests/datetime_fields.rs`), and runs `cargo check`.
 
 The generator version is **pinned** (`GENERATOR_VERSION` in `generate.sh`) and the JAR is downloaded
 directly from Maven Central, so local and CI runs are byte-for-byte identical — there's no dependence
 on a brew/npm install whose default generator version drifts. The run is idempotent: a fresh
 generation reproduces the committed tree exactly. Date-time fields are typed as
-`chrono::DateTime<chrono::FixedOffset>` (generator 7.15+).
+`chrono::DateTime<chrono::FixedOffset>` (generator 7.15+). DoseSpot returns many of them without an
+offset (`"2026-03-12T23:38:38.207"`); those deserialize as UTC.
 
 Only the entry points are hand-written and protected from regeneration: `Cargo.toml`, `src/lib.rs`,
 `src/client.rs`, plus `README.md` and `CLAUDE.md`. Everything under `src/<plan>/` is generated —

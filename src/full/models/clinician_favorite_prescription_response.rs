@@ -47,9 +47,9 @@ pub struct ClinicianFavoritePrescriptionResponse {
     pub title: Option<String>,
     #[serde(rename = "SpecialtyType", skip_serializing_if = "Option::is_none")]
     pub specialty_type: Option<SpecialtyType>,
-    #[serde(rename = "DateAdded", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateAdded", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_added: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "DateLastUsed", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateLastUsed", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_last_used: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "IsSupply", skip_serializing_if = "Option::is_none")]
     pub is_supply: Option<bool>,

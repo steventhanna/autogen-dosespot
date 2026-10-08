@@ -37,7 +37,7 @@ pub struct CompoundPrescriptionRequestUi {
     pub pharmacy_notes: Option<String>,
     #[serde(rename = "NoSubstitutions", skip_serializing_if = "Option::is_none")]
     pub no_substitutions: Option<bool>,
-    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "RxReferenceNumber", skip_serializing_if = "Option::is_none")]
     pub rx_reference_number: Option<String>,
@@ -57,7 +57,7 @@ pub struct CompoundPrescriptionRequestUi {
     pub rtps_coupon: Option<Box<models::RtpsCoupon>>,
     #[serde(rename = "Status")]
     pub status: Status,
-    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "InactiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub inactive_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,

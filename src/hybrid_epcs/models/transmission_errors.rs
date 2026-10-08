@@ -15,9 +15,9 @@ use serde::{Deserialize, Serialize};
 pub struct TransmissionErrors {
     #[serde(rename = "PrescriptionId", skip_serializing_if = "Option::is_none")]
     pub prescription_id: Option<crate::ids::PrescriptionId>,
-    #[serde(rename = "DateWritten", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateWritten", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_written: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "ErrorDateTimeStamp", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ErrorDateTimeStamp", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub error_date_time_stamp: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "ErrorDetails", skip_serializing_if = "Option::is_none")]
     pub error_details: Option<String>,

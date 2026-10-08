@@ -118,6 +118,11 @@ python3 scripts/fix-id-types.py src
 # Guarded by tests/datetime_query_params.rs.
 python3 scripts/fix-datetime-query-params.py src
 
+# DoseSpot returns many date-times without an offset, which chrono's default DateTime<FixedOffset>
+# deserializer rejects. Point every generated DateTime field at src/datetime.rs, which reads
+# offset-less values as UTC. Guarded by tests/datetime_fields.rs.
+python3 scripts/fix-datetime-fields.py src
+
 echo "==> Verifying compilation..."
 cargo check --all-features
 cargo check --no-default-features --features "readonly,native-tls"

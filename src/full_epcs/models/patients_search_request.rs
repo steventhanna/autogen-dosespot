@@ -20,7 +20,7 @@ pub struct PatientsSearchRequest {
     #[serde(rename = "LastName", skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
     /// Patient date of birth (M/dd/yyyy)
-    #[serde(rename = "Dob", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "Dob", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub dob: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Patient Status to include (if none supplied defaults to both)
     #[serde(rename = "Status", skip_serializing_if = "Option::is_none")]

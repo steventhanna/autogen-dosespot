@@ -21,7 +21,7 @@ pub struct Prescription {
     pub refills: Option<String>,
     #[serde(rename = "PrescriptionId", skip_serializing_if = "Option::is_none")]
     pub prescription_id: Option<crate::ids::PrescriptionId>,
-    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "WrittenDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub written_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Directions", skip_serializing_if = "Option::is_none")]
     pub directions: Option<String>,
@@ -37,9 +37,9 @@ pub struct Prescription {
     pub pharmacy_notes: Option<String>,
     #[serde(rename = "NoSubstitutions", skip_serializing_if = "Option::is_none")]
     pub no_substitutions: Option<bool>,
-    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "EffectiveDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub effective_date: Option<chrono::DateTime<chrono::FixedOffset>>,
-    #[serde(rename = "LastFillDate", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "LastFillDate", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub last_fill_date: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "PrescriberId", skip_serializing_if = "Option::is_none")]
     pub prescriber_id: Option<i32>,
@@ -81,7 +81,7 @@ pub struct Prescription {
     pub medication_status: Option<MedicationStatus>,
     #[serde(rename = "Comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[serde(rename = "DateInactive", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "DateInactive", skip_serializing_if = "Option::is_none", default, deserialize_with = "crate::datetime::deserialize_option")]
     pub date_inactive: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "Encounter", skip_serializing_if = "Option::is_none")]
     pub encounter: Option<String>,

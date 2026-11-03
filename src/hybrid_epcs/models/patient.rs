@@ -13,6 +13,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Patient {
+    #[serde(rename = "PhoneAdditionalType1", skip_serializing_if = "Option::is_none")]
+    pub phone_additional_type1: Option<PhoneAdditionalType1>,
+    #[serde(rename = "PhoneAdditionalType2", skip_serializing_if = "Option::is_none")]
+    pub phone_additional_type2: Option<PhoneAdditionalType2>,
+    #[serde(rename = "WeightMetric", skip_serializing_if = "Option::is_none")]
+    pub weight_metric: Option<WeightMetric>,
+    #[serde(rename = "HeightMetric", skip_serializing_if = "Option::is_none")]
+    pub height_metric: Option<HeightMetric>,
     #[serde(rename = "PatientId", skip_serializing_if = "Option::is_none")]
     pub patient_id: Option<crate::ids::PatientId>,
     #[serde(rename = "Prefix", skip_serializing_if = "Option::is_none")]
@@ -45,22 +53,14 @@ pub struct Patient {
     pub phone_additional1: Option<String>,
     #[serde(rename = "PhoneAdditional2", skip_serializing_if = "Option::is_none")]
     pub phone_additional2: Option<String>,
-    #[serde(rename = "PhoneAdditionalType1", skip_serializing_if = "Option::is_none")]
-    pub phone_additional_type1: Option<PhoneAdditionalType1>,
-    #[serde(rename = "PhoneAdditionalType2", skip_serializing_if = "Option::is_none")]
-    pub phone_additional_type2: Option<PhoneAdditionalType2>,
     #[serde(rename = "PrimaryPhone")]
     pub primary_phone: String,
     #[serde(rename = "PrimaryPhoneType")]
     pub primary_phone_type: PrimaryPhoneType,
     #[serde(rename = "Weight", skip_serializing_if = "Option::is_none")]
     pub weight: Option<f32>,
-    #[serde(rename = "WeightMetric", skip_serializing_if = "Option::is_none")]
-    pub weight_metric: Option<WeightMetric>,
     #[serde(rename = "Height", skip_serializing_if = "Option::is_none")]
     pub height: Option<f32>,
-    #[serde(rename = "HeightMetric", skip_serializing_if = "Option::is_none")]
-    pub height_metric: Option<HeightMetric>,
     #[serde(rename = "NonDoseSpotMedicalRecordNumber", skip_serializing_if = "Option::is_none")]
     pub non_dose_spot_medical_record_number: Option<String>,
     #[serde(rename = "Active")]
@@ -74,6 +74,10 @@ pub struct Patient {
 impl Patient {
     pub fn new(first_name: String, last_name: String, date_of_birth: chrono::DateTime<chrono::FixedOffset>, gender: Gender, address1: String, city: String, state: String, zip_code: String, primary_phone: String, primary_phone_type: PrimaryPhoneType, active: bool) -> Patient {
         Patient {
+            phone_additional_type1: None,
+            phone_additional_type2: None,
+            weight_metric: None,
+            height_metric: None,
             patient_id: None,
             prefix: None,
             first_name,
@@ -90,35 +94,15 @@ impl Patient {
             zip_code,
             phone_additional1: None,
             phone_additional2: None,
-            phone_additional_type1: None,
-            phone_additional_type2: None,
             primary_phone,
             primary_phone_type,
             weight: None,
-            weight_metric: None,
             height: None,
-            height_metric: None,
             non_dose_spot_medical_record_number: None,
             active,
             encounter: None,
             is_hospice: None,
         }
-    }
-}
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Gender {
-    #[serde(rename = "Male")]
-    Male,
-    #[serde(rename = "Female")]
-    Female,
-    #[serde(rename = "Unknown")]
-    Unknown,
-}
-
-impl Default for Gender {
-    fn default() -> Gender {
-        Self::Male
     }
 }
 /// 
@@ -175,32 +159,6 @@ impl Default for PhoneAdditionalType2 {
 }
 /// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum PrimaryPhoneType {
-    #[serde(rename = "Undefined")]
-    Undefined,
-    #[serde(rename = "Beeper")]
-    Beeper,
-    #[serde(rename = "Cell")]
-    Cell,
-    #[serde(rename = "Fax")]
-    Fax,
-    #[serde(rename = "Home")]
-    Home,
-    #[serde(rename = "Work")]
-    Work,
-    #[serde(rename = "Night")]
-    Night,
-    #[serde(rename = "Primary")]
-    Primary,
-}
-
-impl Default for PrimaryPhoneType {
-    fn default() -> PrimaryPhoneType {
-        Self::Undefined
-    }
-}
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum WeightMetric {
     #[serde(rename = "lb")]
     Lb,
@@ -225,6 +183,48 @@ pub enum HeightMetric {
 impl Default for HeightMetric {
     fn default() -> HeightMetric {
         Self::Inch
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Gender {
+    #[serde(rename = "Male")]
+    Male,
+    #[serde(rename = "Female")]
+    Female,
+    #[serde(rename = "Unknown")]
+    Unknown,
+}
+
+impl Default for Gender {
+    fn default() -> Gender {
+        Self::Male
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum PrimaryPhoneType {
+    #[serde(rename = "Undefined")]
+    Undefined,
+    #[serde(rename = "Beeper")]
+    Beeper,
+    #[serde(rename = "Cell")]
+    Cell,
+    #[serde(rename = "Fax")]
+    Fax,
+    #[serde(rename = "Home")]
+    Home,
+    #[serde(rename = "Work")]
+    Work,
+    #[serde(rename = "Night")]
+    Night,
+    #[serde(rename = "Primary")]
+    Primary,
+}
+
+impl Default for PrimaryPhoneType {
+    fn default() -> PrimaryPhoneType {
+        Self::Undefined
     }
 }
 

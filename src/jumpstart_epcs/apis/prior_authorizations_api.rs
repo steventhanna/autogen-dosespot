@@ -15,6 +15,62 @@ use crate::jumpstart_epcs::{apis::ResponseContent, models};
 use super::{Error, configuration, ContentType};
 
 
+/// struct for typed errors of method [`prior_authorizations_appeal_case_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsAppealCaseV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_approve_offline_case_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsApproveOfflineCaseV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_cancel_prior_auth_case_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsCancelPriorAuthCaseV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_delete_attachment_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsDeleteAttachmentV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_deny_pa_case_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsDenyPaCaseV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_download_attachment_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsDownloadAttachmentV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_get_in_progress_prior_auth_cases_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsGetInProgressPriorAuthCasesV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_get_pa_history_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsGetPaHistoryV2Error {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`prior_authorizations_get_prior_authorization_status_log_v2`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -22,6 +78,357 @@ pub enum PriorAuthorizationsGetPriorAuthorizationStatusLogV2Error {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`prior_authorizations_get_single_prior_authorization_case_by_id_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsGetSinglePriorAuthorizationCaseByIdV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_get_single_question_details_by_id_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsGetSingleQuestionDetailsByIdV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_initiate_prior_authorization_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsInitiatePriorAuthorizationV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_pa_answer_single_question_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsPaAnswerSingleQuestionV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_remove_prior_auth_case_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsRemovePriorAuthCaseV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_submit_pa_answers_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsSubmitPaAnswersV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`prior_authorizations_upload_attachment_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PriorAuthorizationsUploadAttachmentV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+
+/// Appeals prior authorization case
+pub async fn prior_authorizations_appeal_case_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, request: models::PriorAuthorizationAppealRequest) -> Result<models::Response, Error<PriorAuthorizationsAppealCaseV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_body_request = request;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/appeal", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsAppealCaseV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Approves an offline prior authorization case
+pub async fn prior_authorizations_approve_offline_case_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, request: models::PriorAuthApproveOfflineRequest) -> Result<models::Response, Error<PriorAuthorizationsApproveOfflineCaseV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_body_request = request;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/approveOffline", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsApproveOfflineCaseV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Cancels an active prior authorization case
+pub async fn prior_authorizations_cancel_prior_auth_case_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::Response, Error<PriorAuthorizationsCancelPriorAuthCaseV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/cancel", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsCancelPriorAuthCaseV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Deletes a specific attachment of a prior authorization case
+pub async fn prior_authorizations_delete_attachment_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, attachment_id: i32) -> Result<models::Response, Error<PriorAuthorizationsDeleteAttachmentV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_path_attachment_id = attachment_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/attachments/{attachmentId}", configuration.base_path, priorAuthId=p_path_prior_auth_id, attachmentId=p_path_attachment_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsDeleteAttachmentV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Denies offline or online prior authorization cases
+pub async fn prior_authorizations_deny_pa_case_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::Response, Error<PriorAuthorizationsDenyPaCaseV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/denied", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::Response`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::Response`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsDenyPaCaseV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Downloads an attachment as a file
+pub async fn prior_authorizations_download_attachment_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, attachment_id: i32) -> Result<serde_json::Value, Error<PriorAuthorizationsDownloadAttachmentV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_path_attachment_id = attachment_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/attachments/{attachmentId}", configuration.base_path, priorAuthId=p_path_prior_auth_id, attachmentId=p_path_attachment_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsDownloadAttachmentV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Lists the patient's in-progress prior authorization cases. An in-progress case is one that has received an initiation response and not in one of the terminal statuses.              This is the same filter as the UI.
+pub async fn prior_authorizations_get_in_progress_prior_auth_cases_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId) -> Result<models::ListResponsePriorAuthorizationCaseFullDetails, Error<PriorAuthorizationsGetInProgressPriorAuthCasesV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_patient_id = patient_id;
+
+    let uri_str = format!("{}/api/patients/{patientId}/priorAuths", configuration.base_path, patientId=p_path_patient_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListResponsePriorAuthorizationCaseFullDetails`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ListResponsePriorAuthorizationCaseFullDetails`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsGetInProgressPriorAuthCasesV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Get PA history of a prior authorization case
+pub async fn prior_authorizations_get_pa_history_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::PriorAuthorizationHistoryResponse, Error<PriorAuthorizationsGetPaHistoryV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/history", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PriorAuthorizationHistoryResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PriorAuthorizationHistoryResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsGetPaHistoryV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
 
 /// Status Log for Specific Prior Authorization Case By Id
 pub async fn prior_authorizations_get_prior_authorization_status_log_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::PriorAuthorizationStatusLogUiResponse, Error<PriorAuthorizationsGetPriorAuthorizationStatusLogV2Error>> {
@@ -56,6 +463,270 @@ pub async fn prior_authorizations_get_prior_authorization_status_log_v2(configur
     } else {
         let content = resp.text().await?;
         let entity: Option<PriorAuthorizationsGetPriorAuthorizationStatusLogV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Retrieves Details For A Single Prior Authorization Case
+pub async fn prior_authorizations_get_single_prior_authorization_case_by_id_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::PriorAuthorizationCaseFullDetails, Error<PriorAuthorizationsGetSinglePriorAuthorizationCaseByIdV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PriorAuthorizationCaseFullDetails`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PriorAuthorizationCaseFullDetails`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsGetSinglePriorAuthorizationCaseByIdV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Gets the details of a single prior authorization question
+pub async fn prior_authorizations_get_single_question_details_by_id_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, question_id: i32) -> Result<models::PriorAuthQuestionResponse, Error<PriorAuthorizationsGetSingleQuestionDetailsByIdV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_path_question_id = question_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/questions/{questionId}", configuration.base_path, priorAuthId=p_path_prior_auth_id, questionId=p_path_question_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PriorAuthQuestionResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PriorAuthQuestionResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsGetSingleQuestionDetailsByIdV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Initiates prior authorization for a patients prescription
+pub async fn prior_authorizations_initiate_prior_authorization_v2(configuration: &configuration::Configuration, request: models::PriorAuthInitiationRequest) -> Result<models::IdentifierResponse, Error<PriorAuthorizationsInitiatePriorAuthorizationV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_body_request = request;
+
+    let uri_str = format!("{}/api/priorAuths/initiate", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::IdentifierResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::IdentifierResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsInitiatePriorAuthorizationV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Adds an answer to a single question of a prior authorization case
+pub async fn prior_authorizations_pa_answer_single_question_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId, question_id: i32, request: models::PriorAuthAnswerRequest) -> Result<models::PriorAuthAnswerSingleQuestionResponse, Error<PriorAuthorizationsPaAnswerSingleQuestionV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+    let p_path_question_id = question_id;
+    let p_body_request = request;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/questions/{questionId}/answer", configuration.base_path, priorAuthId=p_path_prior_auth_id, questionId=p_path_question_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body_request);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PriorAuthAnswerSingleQuestionResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PriorAuthAnswerSingleQuestionResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsPaAnswerSingleQuestionV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Removes a prior authorzation case
+pub async fn prior_authorizations_remove_prior_auth_case_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::IdentifierResponse, Error<PriorAuthorizationsRemovePriorAuthCaseV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/remove", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::IdentifierResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::IdentifierResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsRemovePriorAuthCaseV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Submits anwsers of a prior authorization case, which will send the answers out
+pub async fn prior_authorizations_submit_pa_answers_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::IdentifierResponse, Error<PriorAuthorizationsSubmitPaAnswersV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/submit", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::IdentifierResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::IdentifierResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsSubmitPaAnswersV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Adds a single attachment to a prior authorization case
+pub async fn prior_authorizations_upload_attachment_v2(configuration: &configuration::Configuration, prior_auth_id: crate::ids::PriorAuthId) -> Result<models::IdentifierResponse, Error<PriorAuthorizationsUploadAttachmentV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_prior_auth_id = prior_auth_id;
+
+    let uri_str = format!("{}/api/priorAuths/{priorAuthId}/attachments", configuration.base_path, priorAuthId=p_path_prior_auth_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::IdentifierResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::IdentifierResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<PriorAuthorizationsUploadAttachmentV2Error> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }

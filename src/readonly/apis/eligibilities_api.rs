@@ -72,13 +72,17 @@ pub async fn eligibilities_get_medication_coverage_v2(configuration: &configurat
 }
 
 /// Retrieves a patient’s insurance details and payer information
-pub async fn eligibilities_get_payer_information_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId) -> Result<models::ListResponsePayerInformationResponse, Error<EligibilitiesGetPayerInformationV2Error>> {
+pub async fn eligibilities_get_payer_information_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId, clinic_id: Option<crate::ids::ClinicId>) -> Result<models::ListResponsePayerInformationResponse, Error<EligibilitiesGetPayerInformationV2Error>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_patient_id = patient_id;
+    let p_query_clinic_id = clinic_id;
 
     let uri_str = format!("{}/api/patients/{patientId}/eligibilities", configuration.base_path, patientId=p_path_patient_id);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
+    if let Some(ref param_value) = p_query_clinic_id {
+        req_builder = req_builder.query(&[("clinicId", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
     }

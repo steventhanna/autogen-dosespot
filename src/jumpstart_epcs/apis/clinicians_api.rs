@@ -667,14 +667,18 @@ pub async fn clinicians_get_clinician_by_npi_or_dea_v2(configuration: &configura
     }
 }
 
-/// Get Clinician's details By ID
-pub async fn clinicians_get_clinician_details_by_id_v2(configuration: &configuration::Configuration, clinician_id: crate::ids::ClinicianId) -> Result<models::ItemResponseClinician, Error<CliniciansGetClinicianDetailsByIdV2Error>> {
+/// Returns clinician details by ID. Inactive clinicians are included only when includeInactiveClinician is true.
+pub async fn clinicians_get_clinician_details_by_id_v2(configuration: &configuration::Configuration, clinician_id: crate::ids::ClinicianId, include_inactive_clinician: Option<bool>) -> Result<models::ItemResponseClinician, Error<CliniciansGetClinicianDetailsByIdV2Error>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_clinician_id = clinician_id;
+    let p_query_include_inactive_clinician = include_inactive_clinician;
 
     let uri_str = format!("{}/api/clinicians/{clinicianId}", configuration.base_path, clinicianId=p_path_clinician_id);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
+    if let Some(ref param_value) = p_query_include_inactive_clinician {
+        req_builder = req_builder.query(&[("includeInactiveClinician", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
     }

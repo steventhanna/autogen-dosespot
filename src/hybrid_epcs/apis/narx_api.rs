@@ -37,7 +37,7 @@ pub enum NarxGetPatientNarxReportV2Error {
 }
 
 
-/// Returns the timestamp of the most recent successful NARX/PDMP request for the patient
+/// Returns the timestamp of the most recent successful NARX/PDMP report request
 pub async fn narx_get_latest_narx_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId) -> Result<models::LatestNarxResponse, Error<NarxGetLatestNarxV2Error>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_patient_id = patient_id;

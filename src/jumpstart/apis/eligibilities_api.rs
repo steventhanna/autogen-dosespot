@@ -22,6 +22,27 @@ pub enum EligibilitiesCustomInsuranceInfoV2Error {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`eligibilities_get_medication_coverage_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EligibilitiesGetMedicationCoverageV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`eligibilities_get_payer_information_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EligibilitiesGetPayerInformationV2Error {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`eligibilities_get_prescription_benefits_v2`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EligibilitiesGetPrescriptionBenefitsV2Error {
+    UnknownValue(serde_json::Value),
+}
+
 
 /// Add custom insurance to a patient provided the clinic allows it.
 pub async fn eligibilities_custom_insurance_info_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId, custom_insurance_request: models::CustomInsuranceRequest) -> Result<models::IdentifierResponse, Error<EligibilitiesCustomInsuranceInfoV2Error>> {
@@ -58,6 +79,139 @@ pub async fn eligibilities_custom_insurance_info_v2(configuration: &configuratio
     } else {
         let content = resp.text().await?;
         let entity: Option<EligibilitiesCustomInsuranceInfoV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Retrieves information of a patient’s insurance coverage for a specified drug, including copay information, coverage restrictions, and available payer alternatives
+pub async fn eligibilities_get_medication_coverage_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId, patient_eligibility_id: i32, n_dc: &str) -> Result<models::ItemResponseMedicationCoverageResponse, Error<EligibilitiesGetMedicationCoverageV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_patient_id = patient_id;
+    let p_query_patient_eligibility_id = patient_eligibility_id;
+    let p_query_n_dc = n_dc;
+
+    let uri_str = format!("{}/api/patients/{patientId}/formulary", configuration.base_path, patientId=p_path_patient_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    req_builder = req_builder.query(&[("patientEligibilityId", &p_query_patient_eligibility_id.to_string())]);
+    req_builder = req_builder.query(&[("nDC", &p_query_n_dc.to_string())]);
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ItemResponseMedicationCoverageResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ItemResponseMedicationCoverageResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<EligibilitiesGetMedicationCoverageV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Retrieves a patient’s insurance details and payer information
+pub async fn eligibilities_get_payer_information_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId, clinic_id: Option<crate::ids::ClinicId>) -> Result<models::ListResponsePayerInformationResponse, Error<EligibilitiesGetPayerInformationV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_patient_id = patient_id;
+    let p_query_clinic_id = clinic_id;
+
+    let uri_str = format!("{}/api/patients/{patientId}/eligibilities", configuration.base_path, patientId=p_path_patient_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref param_value) = p_query_clinic_id {
+        req_builder = req_builder.query(&[("clinicId", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListResponsePayerInformationResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ListResponsePayerInformationResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<EligibilitiesGetPayerInformationV2Error> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Retrieves information of a patient’s insurance coverage for a specified prescription, including copay information, coverage restrictions, and available payer alternatives
+pub async fn eligibilities_get_prescription_benefits_v2(configuration: &configuration::Configuration, patient_id: crate::ids::PatientId, ndc: &str, pharmacy_id: crate::ids::PharmacyId, quantity: f64, days_supply: i32, dispense_unit_type_id: i32, patient_eligibility_id: Option<i32>) -> Result<models::ItemResponseGetPrescriptionBenefitResponse, Error<EligibilitiesGetPrescriptionBenefitsV2Error>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_patient_id = patient_id;
+    let p_query_ndc = ndc;
+    let p_query_pharmacy_id = pharmacy_id;
+    let p_query_quantity = quantity;
+    let p_query_days_supply = days_supply;
+    let p_query_dispense_unit_type_id = dispense_unit_type_id;
+    let p_query_patient_eligibility_id = patient_eligibility_id;
+
+    let uri_str = format!("{}/api/patients/{patientId}/prescriptionbenefits", configuration.base_path, patientId=p_path_patient_id);
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    req_builder = req_builder.query(&[("ndc", &p_query_ndc.to_string())]);
+    req_builder = req_builder.query(&[("pharmacyId", &p_query_pharmacy_id.to_string())]);
+    req_builder = req_builder.query(&[("quantity", &p_query_quantity.to_string())]);
+    req_builder = req_builder.query(&[("daysSupply", &p_query_days_supply.to_string())]);
+    req_builder = req_builder.query(&[("dispenseUnitTypeID", &p_query_dispense_unit_type_id.to_string())]);
+    if let Some(ref param_value) = p_query_patient_eligibility_id {
+        req_builder = req_builder.query(&[("patientEligibilityId", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ItemResponseGetPrescriptionBenefitResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ItemResponseGetPrescriptionBenefitResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<EligibilitiesGetPrescriptionBenefitsV2Error> = serde_json::from_str(&content).ok();
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }
